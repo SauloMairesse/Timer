@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useState } from 'react';
+
+import GlobalStyle from './styles/globalStyle';
+import userContext from './contexts/userContext';
 
 function App() {
+  const [token, setToken] = useState('');
+  const [user, setUser] = useState({});
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <GlobalStyle />
+      <userContext.Provider value = {{ token, setToken, user, setUser }}>
+        
+        <BrowserRouter>
+          <Routes>
+            {/* <Route path='/home' element={} /> */}
+            {/* <Route path='/home' element={} /> */}
+            {/* <Route path='/home' element={} /> */}
+          </Routes>
+        </BrowserRouter>
+      
+      </userContext.Provider> 
+    </>
   );
 }
 
