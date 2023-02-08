@@ -30,12 +30,13 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
     #root {
+        display: flex;
         position: absolute;
         top: 0px;
         bottom: 0px;
         left: 0px;
         right: 0px;
-        background-color: #9b9b9b;
+        background-color: #2a6a5c;
     }
 `;
 

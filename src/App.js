@@ -4,6 +4,9 @@ import { useState } from 'react';
 import GlobalStyle from './styles/globalStyle';
 import userContext from './contexts/userContext';
 
+import { Home } from './pages/Home';
+import { TimerPage } from './pages/Timer';
+
 function App() {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
@@ -11,13 +14,12 @@ function App() {
   return (
     <>
       <GlobalStyle />
+      
       <userContext.Provider value = {{ token, setToken, user, setUser }}>
-        
         <BrowserRouter>
           <Routes>
-            {/* <Route path='/home' element={} /> */}
-            {/* <Route path='/home' element={} /> */}
-            {/* <Route path='/home' element={} /> */}
+            <Route path='/' element={<Home/>} />
+            <Route path='/timer' element={<TimerPage/>} />
           </Routes>
         </BrowserRouter>
       

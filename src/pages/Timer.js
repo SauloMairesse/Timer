@@ -4,16 +4,18 @@ import styled from "styled-components";
 import { TimerOption } from "../components/Timer";
 import { ToDoOption } from "../components/ToDo";
 
-export function Home() {
+export function TimerPage() {
     const navigate = useNavigate()
 
     return (
         <HomeBox>
             <header>To Do List :</header>
+
             <Functions>
-                <TimerOption/>
                 <ToDoOption />
+                <TimerOption/>
             </Functions>
+            
         </HomeBox>)
 }
 
