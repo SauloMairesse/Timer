@@ -34,8 +34,8 @@ const HomeBox = styled.div`
     width: 100%;
     header {
         display: flex;
-        font-family: 'Fredoka One';
-        color: #f1f1f1;
+        font-family: 'Roboto Condensed', sans-serif;
+        color: white;
         font-size: 30px;
         background-color: #2a6a5c;
         justify-content: center;

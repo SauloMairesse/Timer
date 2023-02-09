@@ -28,7 +28,7 @@ const Cronometro = styled.div`
     padding: 10px 25px 10px 25px;
     margin: 10px;
     h1{
-        font-family: 'Fredoka One';
+        font-family: 'Roboto Condensed', sans-serif;
         letter-spacing: 1px;
         color: #f1f1f1;
     }

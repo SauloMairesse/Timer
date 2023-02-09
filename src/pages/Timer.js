@@ -9,14 +9,19 @@ export function TimerPage() {
 
     return (
         <TimerHTML>
-            <BsArrowLeft style={ {
-                display: 'flex',
-                color: 'white',
-                fontSize: '25'
-            } }/> 
+            <header>
+                <BsArrowLeft style={ {
+                    display: 'flex',
+                    color: 'white',
+                    fontSize: '30',
+                    position: 'fixed',
+                    left: '20px'
+                } }/>
+                <p>Countdown Timer</p>
+            </header>
 
             <main>
-                <TimerComponent time={60*14} /> 
+                <TimerComponent time={60*14}/> 
             </main>
             
         </TimerHTML>)
@@ -27,6 +32,14 @@ const TimerHTML = styled.div`
     flex-direction: column;
     width: 100%;
     padding: 30px;
+    header {
+        font-family: 'Roboto Condensed', sans-serif;
+        color: white;
+        font-size: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     main {
         display: flex;
         justify-content: center;
