@@ -1,48 +1,36 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TimerOption } from "../components/Timer";
-import { ToDoOption } from "../components/ToDo";
+import { BsArrowLeft } from "react-icons/bs";
+import { TimerComponent } from "../components/CDTimer/counterDownTimer";
 
 export function TimerPage() {
     const navigate = useNavigate()
 
     return (
-        <HomeBox>
-            <header>To Do List :</header>
+        <TimerHTML>
+            <BsArrowLeft style={ {
+                display: 'flex',
+                color: 'white',
+                fontSize: '25'
+            } }/> 
 
-            <Functions>
-                <ToDoOption />
-                <TimerOption/>
-            </Functions>
+            <main>
+                <TimerComponent time={60*14} /> 
+            </main>
             
-        </HomeBox>)
+        </TimerHTML>)
 }
 
-const Functions = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    align-items: center;
-    border-radius: 15px 15px 0 0;
-    background-color: #bacfca;
-    padding-top: 40px;
-`
-
-const HomeBox = styled.div`
+const TimerHTML = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    header {
+    padding: 30px;
+    main {
         display: flex;
-        font-family: 'Fredoka One';
-        color: #f1f1f1;
-        font-size: 30px;
-        background-color: #2a6a5c;
         justify-content: center;
-        align-items: center;
-        height: 200px;
-        width: 100%;
-    }
+        margin-top: 30vh;
+        height: 100%;
+    }  
 `

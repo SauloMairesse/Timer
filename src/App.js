@@ -20,6 +20,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home/>} />
             <Route path='/timer' element={<TimerPage/>} />
+            <Route path='/todo' element={<></>} />
           </Routes>
         </BrowserRouter>
       

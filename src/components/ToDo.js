@@ -1,10 +1,12 @@
 import styled from "styled-components"
 import { FaTasks } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export function ToDoOption({func}){
-    
+    const navigate = useNavigate()
+
     return (
-        <Cronometro>
+        <Cronometro onClick={() => navigate('/todo')}>
             <FaTasks style={ {
                 color: 'white',
                 fontSize: '25px',
