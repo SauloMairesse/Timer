@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { BsArrowLeft } from "react-icons/bs";
 import { TimerComponent } from "../components/CDTimer/counterDownTimer";
 
-export function TimerPage() {
+export function ToDo() {
     const navigate = useNavigate()
 
     return (
-        <TimerHTML>
+        <ToDoHTML>
             <header>
                 <BsArrowLeft    onClick={() => navigate('/')} 
                                 style={ {
@@ -18,20 +18,16 @@ export function TimerPage() {
                                     position: 'fixed',
                                     left: '20px'
                                 } }/>
-                <p>Countdown Timer</p>
+                <p>To Do List</p>
             </header>
 
-            <TimerComponent style={{}}
-                            time={60*14}/> 
-            
-        </TimerHTML>)
+        </ToDoHTML>)
 }
 
-const TimerHTML = styled.div`
-    display: block;
+const ToDoHTML = styled.div`
+    display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100%;
     padding: 30px;
     header {
         font-family: 'Roboto Condensed', sans-serif;

@@ -6,6 +6,7 @@ import userContext from './contexts/userContext';
 
 import { Home } from './pages/Home';
 import { TimerPage } from './pages/Timer';
+import { ToDo } from './pages/ToDo';
 
 function App() {
   const [token, setToken] = useState('');
@@ -20,7 +21,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home/>} />
             <Route path='/timer' element={<TimerPage/>} />
-            <Route path='/todo' element={<></>} />
+            <Route path='/todo' element={<ToDo/>} />
           </Routes>
         </BrowserRouter>
       
