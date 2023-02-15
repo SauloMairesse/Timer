@@ -5,8 +5,19 @@ import { SlControlPlay, SlControlPause } from "react-icons/sl";
 import { MdDownloadDone } from "react-icons/md";
 
 export function TimerComponent({time}){
-    console.log('time recebido : ', time)
+    //format time
+    function formatTime(time){
+        let minutes = Math.floor(time / 60)
+        let seconds = Math.floor(time - (minutes*60))
+    
+        if(minutes <= 10) minutes = `0${minutes}`
+        if(seconds <= 10) seconds = `0${seconds}`
+        
+        return `${minutes} : ${seconds}`
+    }
+    
     const formatedTime = formatTime(time)
+
     const [checkTask, setCheckTask] = useState(false)
     const [coundtDown, setCountDown] = useState(time)
     const [play, setPlay] = useState(false)
@@ -29,7 +40,6 @@ export function TimerComponent({time}){
     return (
         <TimerComponentHTML>
             {(checkTask) ?
-                <> 
                     <CheckTaskHTML>
                         <TextCheckTask>Is the task done ?</TextCheckTask>
                         <section>
@@ -42,55 +52,43 @@ export function TimerComponent({time}){
                             </ReturnToTaskButton>
                         </section>
                     </CheckTaskHTML>         
-                </> 
-                    : 
-                <></> 
-            }
-            <Clock>{formatTime(coundtDown)}</Clock>
-            <Buttons>
-               <SlControlPlay 
-                    onClick={() => {
-                        setPlay(!play)
-                        setStop(false)
-                    }}
-                    style={{
-                        fontSize: '25',
-                        color: 'white',
-                        margin: '5px'
-                    }}/>
-               <SlControlPause 
-                    onClick={() => { 
-                        setStop(true)
-                    }}
-                    style={{
-                        fontSize: '23',
-                        color: 'white',
-                        margin: '5px'
-                    }}/>
-               <MdDownloadDone 
-                    onClick={() => { 
-                        setStop(true)
-                        setCheckTask(true)
-                    }}
-                    style={{
-                        fontSize: '30',
-                        color: 'white',
-                        margin: '5px'
-                    }}/>
-            </Buttons> 
+                : 
+                    <>
+                        <Clock>{formatTime(coundtDown)}</Clock>
+                        <Buttons>
+                        <SlControlPlay 
+                                onClick={() => {
+                                    setPlay(!play)
+                                    setStop(false)
+                                }}
+                                style={{
+                                    fontSize: '25',
+                                    color: 'white',
+                                    margin: '5px'
+                                }}/>
+                        <SlControlPause 
+                                onClick={() => { 
+                                    setStop(true)
+                                }}
+                                style={{
+                                    fontSize: '23',
+                                    color: 'white',
+                                    margin: '5px'
+                                }}/>
+                        <MdDownloadDone 
+                                onClick={() => { 
+                                    setStop(true)
+                                    setCheckTask(true)
+                                }}
+                                style={{
+                                    fontSize: '30',
+                                    color: 'white',
+                                    margin: '5px'
+                                }}/>
+                        </Buttons> 
+                    </>   }
         </TimerComponentHTML>
         )
-}
-//functions
-
-function formatTime(time){
-    let minutes = Math.floor(time / 60)
-    let seconds = Math.floor(time - (minutes*60))
-
-    if(minutes <= 10) minutes = `0${minutes}`
-    if(seconds <= 10) seconds = `0${seconds}`
-    
-    return `${minutes} : ${seconds}`
 }
 
 const TimerComponentHTML = styled.div`
@@ -112,14 +110,8 @@ const Buttons = styled.div`
 const CheckTaskHTML = styled.div`
    display: flex;
    flex-direction: column;
-   position: fixed;
-   top: 0;
-   width: 100vw;
-   height: 100vh;
    justify-content: center;
    align-items: center;
-   z-index: 2;
-   background-color: #2a6a5c;
 `
 const ConfirmButton = styled.button`
   border: none;
