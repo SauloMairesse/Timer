@@ -32,5 +32,3 @@ const Cronometro = styled.div`
         color: white;
     }
 `
-const Text = styled.div`
-`

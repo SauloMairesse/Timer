@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TimerOption } from "../components/Timer";
-import { ToDoOption } from "../components/ToDo";
+import { TimerOption } from "../components/TimerOption";
+import { ToDoOption } from "../components/ToDoOption";
 
 export function Home() {
     const navigate = useNavigate()
@@ -14,7 +14,7 @@ export function Home() {
                 <TimerOption/>
                 <ToDoOption />
             </Functions>
-        </HomeBox>)
+        </HomeBox> )
 }
 
 const Functions = styled.div`
@@ -27,7 +27,6 @@ const Functions = styled.div`
     background-color: #bacfca;
     padding-top: 40px;
 `
-
 const HomeBox = styled.div`
     display: flex;
     flex-direction: column;

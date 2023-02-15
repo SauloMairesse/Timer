@@ -5,6 +5,7 @@ import { SlControlPlay, SlControlPause } from "react-icons/sl";
 import { MdDownloadDone } from "react-icons/md";
 
 export function TimerComponent({time}){
+    console.log('time recebido : ', time)
     const formatedTime = formatTime(time)
     const [checkTask, setCheckTask] = useState(false)
     const [coundtDown, setCountDown] = useState(time)
@@ -95,8 +96,6 @@ function formatTime(time){
 const TimerComponentHTML = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 30vh;
 `
 const Clock = styled.p`
     font-family: 'Orbitron', sans-serif;
