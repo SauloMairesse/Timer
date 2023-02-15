@@ -7,12 +7,13 @@ import { BsArrowLeft } from "react-icons/bs";
 export function ToDo() {
     const navigate = useNavigate()
     const [data, setData] = useState()
-    const [time, setTime] = useState('')
-
+    
+    const [time, setTime] = useState({})
+    const [active, setActive] = useState(false);
     function handleForm(e) {
         setData({
-            ...data,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
+            time: time
         })
         console.log('data :', data)
     }
@@ -34,27 +35,37 @@ export function ToDo() {
                     <input  placeholder = "What's the new task ? "
                             type="text"
                             name="task"
-                            onChange={handleForm}/>
-
-                    <TimeInput>
+                            onChange={handleForm}
+                            required />
+                    <TimeSettings>
                         <button onClick={(event) => {
-                                event.preventDefault()
-                                setTime(!time)}}>
+                                    event.preventDefault()
+                                    setTime(!time)
+                                    setActive(!active)
+                                    }}
+                                style={{backgroundColor: active ? '#2a6a5c' : 'red'}}>
                             time
                         </button> 
                         {(time) ?
-                            <>
-                                <input  placeholder = "set Time to Task "
-                                    type="time"
-                                    name="time"
-                                    onChange={handleForm} /> 
+                            <TimeSelection>
+                                <form>
+                                    <input  placeholder="00"
+                                            type="number"
+                                            name="mm"
+                                            onChange={(e) => setData({...time, mm: e.target.value})} />
+                                    <input  placeholder="00"
+                                            type="number"
+                                            name="ss"
+                                            onChange={(e) => setTime({...time, ss: e.target.value})} />
+                                </form>
                                 <span>Set time you think you will spande </span>
-                            </> 
+                            </TimeSelection> 
                             : 
                             <></>
                         } 
-                    </TimeInput>
-                <input type="submit" value="Submit" />
+                    </TimeSettings>
+                <AddTask    onClick={(event) => event.preventDefault} 
+                        type="submit">Add Task</AddTask>
             </TaskForm>
         </ToDoHTML>)
 }
@@ -84,12 +95,13 @@ const TaskForm = styled.form`
         border: none;
         border-radius: 5px;
         height: 30px;
+        margin-bottom: 5px;
     }
 `
-const TimeInput = styled.div`
+const TimeSettings = styled.div`
     display: flex;
     align-items: center;
-    margin: 3px 0 15px 0;
+    margin-bottom: 5px;
     button{
         display: flex;
         justify-content: center;
@@ -99,15 +111,9 @@ const TimeInput = styled.div`
         height: 20px;
         border: none;
         border-radius: 5px;
-        padding: 3px;
-        background-color: #2a6a5c;
         font-weight: 500;
-        margin-right: 10px;
         font-family: 'Roboto Condensed', sans-serif;
-    }
-    input {
-        height: 20px;
-        margin-right: 5px;
+        margin-right: 7px;
     }
     span{
         font-family: 'Roboto Condensed', sans-serif;
@@ -116,4 +122,31 @@ const TimeInput = styled.div`
         color: #808080;
     }
 
+`
+
+const TimeSelection = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    input {
+        display: flex;
+        text-align: center;
+        width: 25px;
+        height: 20px;
+        margin-bottom: 0;
+        margin-right: 3px;
+    }
+`
+const AddTask = styled.button`
+    border: none;
+    border-radius: 5px;
+    padding: 3px;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #2a6a5c;
+    color: white;
 `
