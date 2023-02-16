@@ -43,19 +43,21 @@ export function ToDo() {
                                     setTime(!time)
                                     setActive(!active)
                                     }}
-                                style={{backgroundColor: active ? '#2a6a5c' : 'red'}}>
+                                style={{backgroundColor: active ? '#2a6a5c' : 'red' }}>
                             time
                         </button> 
-                        {(time) ?
+                        {(!time) ?
                             <TimeSelection>
                                 <form>
                                     <input  placeholder="00"
                                             type="number"
                                             name="mm"
+                                            required
                                             onChange={(e) => setData({...time, mm: e.target.value})} />
                                     <input  placeholder="00"
                                             type="number"
                                             name="ss"
+                                            required
                                             onChange={(e) => setTime({...time, ss: e.target.value})} />
                                 </form>
                                 <span>Set time you think you will spande </span>
