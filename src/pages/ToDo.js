@@ -7,9 +7,9 @@ import { BsArrowLeft } from "react-icons/bs";
 export function ToDo() {
     const navigate = useNavigate()
     const [data, setData] = useState()
-    
     const [time, setTime] = useState({})
     const [active, setActive] = useState(false);
+
     function handleForm(e) {
         setData({
             [e.target.name]: e.target.value,
@@ -17,6 +17,12 @@ export function ToDo() {
         })
         console.log('data :', data)
     }
+    function submitNewTask(event) {
+        event.preventDefault()
+        postNewTask()
+    }
+
+    
 
     return (
         <ToDoHTML>
@@ -40,30 +46,31 @@ export function ToDo() {
                     <TimeSettings>
                         <button onClick={(event) => {
                                     event.preventDefault()
-                                    setTime(!time)
+                                    setTime(time)
                                     setActive(!active)
+                                    
                                     }}
-                                style={{backgroundColor: active ? '#2a6a5c' : 'red' }}>
+                                style={{backgroundColor: !active ? '#2a6a5c' : 'red' }}>
                             time
                         </button> 
                         {(!time) ?
-                            <TimeSelection>
-                                <form>
-                                    <input  placeholder="00"
-                                            type="number"
-                                            name="mm"
-                                            required
-                                            onChange={(e) => setData({...time, mm: e.target.value})} />
-                                    <input  placeholder="00"
-                                            type="number"
-                                            name="ss"
-                                            required
-                                            onChange={(e) => setTime({...time, ss: e.target.value})} />
-                                </form>
-                                <span>Set time you think you will spande </span>
-                            </TimeSelection> 
+                                <></>
                             : 
-                            <></>
+                                <TimeSelection>
+                                    <form>
+                                        <input  placeholder="00"
+                                                type="number"
+                                                name="mm"
+                                                required
+                                                onChange={(e) => setData({...time, mm: e.target.value})} />
+                                        <input  placeholder="00"
+                                                type="number"
+                                                name="ss"
+                                                required
+                                                onChange={(e) => setTime({...time, ss: e.target.value})} />
+                                    </form>
+                                    <span>Set time you think you will spande </span>
+                                </TimeSelection> 
                         } 
                     </TimeSettings>
                 <AddTask    onClick={(event) => event.preventDefault} 
