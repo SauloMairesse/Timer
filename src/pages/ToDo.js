@@ -1,14 +1,27 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-
 import { BsArrowLeft } from "react-icons/bs";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
 
 export function ToDo() {
     const navigate = useNavigate()
     const [data, setData] = useState()
     const [time, setTime] = useState({})
     const [active, setActive] = useState(false);
+    const [tasks, setTasks] = useState([])
+
+    useEffect(() => {
+        const BASE_URL = process.env.REACT_APP_BASE_URL
+        const promise = axios.get(`${BASE_URL}/task/1`)
+        promise.then((res) => {
+            setTasks(res.data)
+            console.log('tasks : ', res.data)
+        } )
+        promise.catch( (e) => {
+            console.log('erro catch post newTask :', e)
+        })
+    } , [])
 
     function handleForm(e) {
         setData({
@@ -17,12 +30,32 @@ export function ToDo() {
         })
         console.log('data :', data)
     }
+
     function submitNewTask(event) {
         event.preventDefault()
-        postNewTask()
+
+        const BASE_URL = process.env.REACT_APP_BASE_URL
+        
+        const promise = axios.post(`${BASE_URL}/newtask`, {
+            name: data.name,
+            time: `${data.time.mm}:${data.time.ss}`,
+            userId: 1
+        })
+        promise.then( (res) => {
+            console.log(res.data)
+        } )
+        promise.catch( (e) => {
+            console.log('erro catch post newTask :', e)
+        })
     }
 
-    
+    function Task(name, time) {
+        return (
+            <TaskHTML>
+                <span> {name} </span>
+                <span> {time} </span>
+            </TaskHTML> )
+    }
 
     return (
         <ToDoHTML>
@@ -36,11 +69,12 @@ export function ToDo() {
                                     left: '20px'
                                 } }/>
                 <p>To Do List</p>
-            </header>            
+            </header>      
+            
             <TaskForm>
                     <input  placeholder = "What's the new task ? "
                             type="text"
-                            name="task"
+                            name="name"
                             onChange={handleForm}
                             required />
                     <TimeSettings>
@@ -62,7 +96,7 @@ export function ToDo() {
                                                 type="number"
                                                 name="mm"
                                                 required
-                                                onChange={(e) => setData({...time, mm: e.target.value})} />
+                                                onChange={(e) => setTime({...time, mm: e.target.value})} />
                                         <input  placeholder="00"
                                                 type="number"
                                                 name="ss"
@@ -73,11 +107,20 @@ export function ToDo() {
                                 </TimeSelection> 
                         } 
                     </TimeSettings>
-                <AddTask    onClick={(event) => event.preventDefault} 
-                        type="submit">Add Task</AddTask>
+                <AddTask    onClick={(event) => submitNewTask(event)} 
+                            type="submit">Add Task</AddTask>
             </TaskForm>
+
+            <TaskSection>
+                {tasks.map((task) => Task(task.name, task.time))}
+            </TaskSection>
         </ToDoHTML>)
 }
+
+const TaskSection = styled.section`
+`
+const TaskHTML = styled.div`
+`
 
 const ToDoHTML = styled.div`
     display: flex;
@@ -132,7 +175,6 @@ const TimeSettings = styled.div`
     }
 
 `
-
 const TimeSelection = styled.div`
     display: flex;
     justify-content: center;
