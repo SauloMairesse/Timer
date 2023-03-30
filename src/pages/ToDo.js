@@ -12,9 +12,8 @@ export function ToDo() {
         mm: parseInt("00"),
         ss: parseInt("00")
     })
-    const [time, setTime] = useState({mm: parseInt("00"), ss: parseInt("00")})
     const [tasks, setTasks] = useState([])
-
+    const [recall, setRecall] = useState(true)
     useEffect(() => {
         const BASE_URL = process.env.REACT_APP_BASE_URL
         const promise = axios.get(`${BASE_URL}/task/1`)
@@ -24,7 +23,7 @@ export function ToDo() {
         promise.catch( (e) => {
             console.log('erro catch post newTask :', e)
         })
-    } , [])
+    } , [recall])
 
     function handleForm(e) {
         setData({
@@ -90,7 +89,13 @@ export function ToDo() {
                 <p>To Do List</p>
             </header>      
 
-            <TaskForm>
+            <TaskForm   onSubmit={ (event) => {
+                        event.preventDefault()
+                        setRecall(!recall)
+                        submitNewTask(event)
+                        event.target.reset()
+                        event.target.querySelector('input[name=name]').focus()
+                } }>
                 <input  placeholder = "What's the new task ? "
                         type="text"
                         name="name"
@@ -111,8 +116,7 @@ export function ToDo() {
                             onChange={ handleForm } />
                 </div>
 
-                <ButtonAddTask  onClick={(event) => submitNewTask(event)} 
-                                type="submit"
+                <ButtonAddTask type="submit"
                                 id="btn">
                     Add Task
                 </ButtonAddTask>
