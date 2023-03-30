@@ -3,12 +3,16 @@ import { BsArrowLeft } from "react-icons/bs";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { SlControlPlay } from "react-icons/sl";
 
 export function ToDo() {
     const navigate = useNavigate()
-    const [data, setData] = useState()
-    const [time, setTime] = useState({})
-    const [active, setActive] = useState(false);
+    const [data, setData] = useState({
+        name: '',
+        mm: parseInt("00"),
+        ss: parseInt("00")
+    })
+    const [time, setTime] = useState({mm: parseInt("00"), ss: parseInt("00")})
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
@@ -16,7 +20,6 @@ export function ToDo() {
         const promise = axios.get(`${BASE_URL}/task/1`)
         promise.then((res) => {
             setTasks(res.data)
-            console.log('tasks : ', res.data)
         } )
         promise.catch( (e) => {
             console.log('erro catch post newTask :', e)
@@ -25,25 +28,31 @@ export function ToDo() {
 
     function handleForm(e) {
         setData({
-            [e.target.name]: e.target.value,
-            time: time
+            ...data,
+            [e.target.name]: e.target.value
         })
         console.log('data :', data)
     }
 
     function submitNewTask(event) {
-        event.preventDefault()
-
         const BASE_URL = process.env.REACT_APP_BASE_URL
-        
-        const promise = axios.post(`${BASE_URL}/newtask`, {
+        const newTask = {
             name: data.name,
-            time: `${data.time.mm}:${data.time.ss}`,
+            time: `${data.mm}:${data.ss}`,
             userId: 1
+        }
+
+        const promise = axios.post(`${BASE_URL}/newtask`, newTask)
+        promise.then((res) => {
+            console.log(`resposta postagem : `, res)
+            const btn = document.getElementById('btn')
+            console.log('btn :', btn)
+            btn.addEventListener('click', function handleClick() {
+                console.log('cliquei no botao')
+                const inputs = document.querySelectorAll('name, mm, ss');
+                inputs.forEach(input => { input.value = ''});
+            } )
         })
-        promise.then( (res) => {
-            console.log(res.data)
-        } )
         promise.catch( (e) => {
             console.log('erro catch post newTask :', e)
         })
@@ -52,8 +61,18 @@ export function ToDo() {
     function Task(name, time) {
         return (
             <TaskHTML>
-                <span> {name} </span>
-                <span> {time} </span>
+                <div>
+                    <h1> {name} </h1>
+                    <h2> {time} </h2>
+                </div>
+                <SlControlPlay 
+                    onClick={() => console.log(`play task`) }
+                    style={{
+                        justifyContent: 'center',
+                        fontSize: '20',
+                        color: 'white',
+                        margin: '5px'
+                    }}/>
             </TaskHTML> )
     }
 
@@ -70,45 +89,33 @@ export function ToDo() {
                                 } }/>
                 <p>To Do List</p>
             </header>      
-            
+
             <TaskForm>
-                    <input  placeholder = "What's the new task ? "
-                            type="text"
-                            name="name"
-                            onChange={handleForm}
-                            required />
-                    <TimeSettings>
-                        <button onClick={(event) => {
-                                    event.preventDefault()
-                                    setTime(time)
-                                    setActive(!active)
-                                    
-                                    }}
-                                style={{backgroundColor: !active ? '#2a6a5c' : 'red' }}>
-                            time
-                        </button> 
-                        {(!time) ?
-                                <></>
-                            : 
-                                <TimeSelection>
-                                    <form>
-                                        <input  placeholder="00"
-                                                type="number"
-                                                name="mm"
-                                                required
-                                                onChange={(e) => setTime({...time, mm: e.target.value})} />
-                                        <input  placeholder="00"
-                                                type="number"
-                                                name="ss"
-                                                required
-                                                onChange={(e) => setTime({...time, ss: e.target.value})} />
-                                    </form>
-                                    <span>Set time you think you will spande </span>
-                                </TimeSelection> 
-                        } 
-                    </TimeSettings>
-                <AddTask    onClick={(event) => submitNewTask(event)} 
-                            type="submit">Add Task</AddTask>
+                <input  placeholder = "What's the new task ? "
+                        type="text"
+                        name="name"
+                        onChange={handleForm}
+                        required
+                        id="name" />
+                <span>Set time you think you will spande </span>
+                <div>
+                    <input  placeholder="00"
+                            type="number"
+                            name="mm"
+                            required
+                            onChange={handleForm} />
+                    <input  placeholder="00"
+                            type="number"
+                            name="ss"
+                            required
+                            onChange={ handleForm } />
+                </div>
+
+                <ButtonAddTask  onClick={(event) => submitNewTask(event)} 
+                                type="submit"
+                                id="btn">
+                    Add Task
+                </ButtonAddTask>
             </TaskForm>
 
             <TaskSection>
@@ -118,10 +125,29 @@ export function ToDo() {
 }
 
 const TaskSection = styled.section`
-`
-const TaskHTML = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
 `
 
+const TaskHTML = styled.div`
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    height: 50px;
+    margin: 5px;
+    padding: 5px 10px 5px 5px;
+    border: solid #bacfca 3px;
+    border-radius: 10px;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
+    h1 {
+        width: 230px;
+        border-bottom: solid #bacfca 1px;;
+        margin-bottom: 2px;
+    }
+`
 const ToDoHTML = styled.div`
     display: flex;
     flex-direction: column;
@@ -139,61 +165,32 @@ const ToDoHTML = styled.div`
 `
 const TaskForm = styled.form`
     display: flex;
+    width: 300px;
     flex-direction: column;
     background-color:#bacfca;
     padding: 10px;
     border-radius: 10px;
+    span { 
+        font-family: 'Roboto Condensed', sans-serif;
+        color: #346b5c;
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
     input {
         border: none;
         border-radius: 5px;
         height: 30px;
         margin-bottom: 5px;
     }
-`
-const TimeSettings = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    button{
+    div {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        width: 40px;
-        height: 20px;
-        border: none;
-        border-radius: 5px;
-        font-weight: 500;
-        font-family: 'Roboto Condensed', sans-serif;
-        margin-right: 7px;
-    }
-    span{
-        font-family: 'Roboto Condensed', sans-serif;
-        font-style: italic;
-        font-size: 10px;
-        color: #808080;
-    }
-
-`
-const TimeSelection = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    input {
-        display: flex;
-        text-align: center;
-        width: 25px;
-        height: 20px;
-        margin-bottom: 0;
-        margin-right: 3px;
+        input {
+            width: 50px;
+            margin-right: 10px;
+        }
     }
 `
-const AddTask = styled.button`
+const ButtonAddTask = styled.button`
     border: none;
     border-radius: 5px;
     padding: 3px;
