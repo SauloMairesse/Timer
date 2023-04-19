@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { SlControlPlay } from "react-icons/sl";
+import userContext from "../contexts/userContext";
 
 export function ToDo() {
+    const {taskTime, setTaskTime} = React.useContext(userContext)
     const navigate = useNavigate()
     const [data, setData] = useState({
         name: '',
@@ -14,6 +16,7 @@ export function ToDo() {
     })
     const [tasks, setTasks] = useState([])
     const [recall, setRecall] = useState(true)
+
     useEffect(() => {
         const BASE_URL = process.env.REACT_APP_BASE_URL
         const promise = axios.get(`${BASE_URL}/task/1`)
@@ -65,7 +68,10 @@ export function ToDo() {
                     <h2> {time} </h2>
                 </div>
                 <SlControlPlay 
-                    onClick={() => console.log(`play task`) }
+                    onClick={() => {
+                        setTaskTime({mm: Number(time.slice(0,2)), ss: Number(time.slice(3))})
+                        navigate('/timer')
+                    }}
                     style={{
                         justifyContent: 'center',
                         fontSize: '20',
@@ -78,7 +84,11 @@ export function ToDo() {
     return (
         <ToDoHTML>
             <header>
-                <BsArrowLeft    onClick={() => navigate('/')} 
+                <BsArrowLeft onClick={() => {
+                        setTaskTime(false)
+                        navigate('/')
+                    }
+                } 
                                 style={ {
                                     display: 'flex',
                                     color: 'white',

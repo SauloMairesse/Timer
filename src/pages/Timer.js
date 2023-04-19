@@ -3,16 +3,22 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BsArrowLeft } from "react-icons/bs";
 import { TimerComponent } from "../components/CDTimer/counterDownTimer";
+import userContext from "../contexts/userContext";
 
 export function TimerPage() {
     const navigate = useNavigate()
-    const [time, setTime] = useState({mm: 0, ss: 0})
+    const { taskTime, setTaskTime } = React.useContext(userContext)
+    const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
     const [startTimer, setStartTimer] = useState(null)
 
     return (
         <TimerHTML>
+            {console.log('taskTime :', !taskTime)}
             <header>
-                <BsArrowLeft    onClick={() => navigate('/')} 
+                <BsArrowLeft onClick={() => {
+                    setTaskTime(false)    
+                    navigate('/')
+                }} 
                                 style={ {
                                     display: 'flex',
                                     color: 'white',
@@ -24,31 +30,32 @@ export function TimerPage() {
             </header>
             
             <main>
-                {(!startTimer) ?
+                {(!taskTime) ?
                     <>
-                       <TimeForm>
+                        <TimeForm>
                             <label>
                                 mm
-                                <input  placeholder="00"
-                                        type="number"
-                                        name="mm"
-                                        onChange={(e) => setTime({...time, mm: e.target.value})} />
+                            <input  placeholder="00"
+                                    type="number"
+                                    name="mm"
+                                    onChange={(e) => setTime({ ...time, mm: e.target.value })
+                                    } />
                             </label>
                             <label>
                                 ss
                                 <input  placeholder="00"
                                         type="number"
                                         name="ss"
-                                        onChange={(e) => setTime({...time, ss: e.target.value})} />
+                                    onChange={(e) => setTime({ ...time, ss: e.target.value })
+                                    } />
                             </label>
-                       </TimeForm>
-                       {console.log( console.log('timo somado : ', Number(time.mm*60)+Number(time.ss)))}
-                       <StartTimer onClick={() => setStartTimer(time)}>
+                        </TimeForm>
+                        <StartTimer onClick={() => setTaskTime(time)}>
                             Start
                         </StartTimer>
                     </>
-                    : 
-                        <TimerComponent time={Number(time.mm*60)+Number(time.ss)} /> }
+                    :
+                    <TimerComponent time={Number(taskTime.mm*60)+Number(taskTime.ss)} /> }
             </main>
             
         </TimerHTML>)

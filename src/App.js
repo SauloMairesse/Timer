@@ -11,12 +11,12 @@ import { ToDo } from './pages/ToDo';
 function App() {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
-  
+  const [taskTime, setTaskTime] = useState(false)  
   return (
     <>
       <GlobalStyle />
       
-      <userContext.Provider value = {{ token, setToken, user, setUser }}>
+      <userContext.Provider value = {{ token, setToken, user, setUser, taskTime, setTaskTime }}>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home/>} />
