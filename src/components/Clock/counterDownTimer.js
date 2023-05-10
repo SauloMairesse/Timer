@@ -7,11 +7,17 @@ import { MdDownloadDone } from "react-icons/md";
 import { CheckingTask } from "./CheckBoxTask.js";
 import userContext from "../../contexts/userContext.js";
 
-export function TimerComponent({time}){
+export function TimerComponent({ time }) {
+    const mimAndSecond = time.split(':')
+    const sumTime = Number(mimAndSecond[0] * 60) + Number(mimAndSecond[1])
+    const [coundtDown, setCountDown] = useState(sumTime)
+    
     const [checkTask, setCheckTask] = useState(false)
-    const [coundtDown, setCountDown] = useState(time)
     const [play, setPlay] = useState(false)
     const [stop, setStop] = useState(false)
+
+    const { workedTask, setWorkedTask } = useContext(userContext)
+   
     const timeId = useRef() //The useRef Hook allows you to persist values between renders.
 
     useEffect( () => {
@@ -51,7 +57,7 @@ export function TimerComponent({time}){
                 <>
                     <Clock>{formatTime(coundtDown)}</Clock>
                     <Buttons>
-                        <SlControlPlay 
+                        <SlControlPlay
                                 onClick={() => {
                                     setPlay(!play)
                                     setStop(false)
@@ -64,8 +70,6 @@ export function TimerComponent({time}){
                         <SlControlPause 
                                 onClick={() => { 
                                     setStop(true)
-                                    // const currentTime = document.querySelector('span').innerText;
-                                    // setLastTime(currentTime)
                                 }}
                                 style={{
                                     fontSize: '23',

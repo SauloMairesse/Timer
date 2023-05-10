@@ -10,15 +10,6 @@ export function TimerPage() {
     const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
     const { workedTask, setWorkedTask } = React.useContext(userContext)
 
-    function timeObj(timeString) {
-        console.log('time string :', timeString)
-        const mm = workedTask.time.slice(3)
-        const ss = workedTask.time.slice(3, 6)
-        const somatorio = Number(mm * 60) + Number(ss)
-        console.log('somatorio :', somatorio)
-        return (somatorio)
-    }
-
     return (
         <TimerHTML>
             <header>
@@ -63,8 +54,9 @@ export function TimerPage() {
                     </TimerSettingDiv>
                     :
                     <TaskTimerDiv>
-                        {(!workedTask.title) ? <></> : <h1>{workedTask.title}</h1> }
-                        <TimerComponent time={timeObj(workedTask)} /> 
+                        {(!workedTask.title) ? <></> : <h1>{workedTask.title}</h1>}
+                        {console.log('tarefa e tempo em texto: ', workedTask)}            
+                        <TimerComponent time={workedTask.time} /> 
                     </TaskTimerDiv>
                 }
             
