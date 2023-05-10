@@ -1,28 +1,18 @@
-import { useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
 import { SlControlPlay, SlControlPause } from "react-icons/sl";
 import { MdDownloadDone } from "react-icons/md";
 
-export function TimerComponent({time}){
-    //format time
-    function formatTime(time){
-        let minutes = Math.floor(time / 60)
-        let seconds = Math.floor(time - (minutes*60))
-    
-        if(minutes <= 10) minutes = `0${minutes}`
-        if(seconds <= 10) seconds = `0${seconds}`
-        
-        return `${minutes} : ${seconds}`
-    }
-    
-    const formatedTime = formatTime(time)
+import { CheckingTask } from "./CheckBoxTask.js";
+import userContext from "../../contexts/userContext.js";
 
+export function TimerComponent({time}){
     const [checkTask, setCheckTask] = useState(false)
     const [coundtDown, setCountDown] = useState(time)
     const [play, setPlay] = useState(false)
     const [stop, setStop] = useState(false)
-    const timeId = useRef()
+    const timeId = useRef() //The useRef Hook allows you to persist values between renders.
 
     useEffect( () => {
         timeId.current = setInterval( () => {
@@ -37,25 +27,30 @@ export function TimerComponent({time}){
         }
     }, [coundtDown])
 
+    function formatTime(time){
+        let minutes = Math.floor(time / 60)
+        let seconds = Math.floor(time - (minutes*60))
+
+        if(minutes <= 10) minutes = `0${minutes}`
+        if (seconds <= 10) seconds = `0${seconds}`
+        
+        return `${minutes} : ${seconds}`
+    }
+    //noBUtton from checking Screen before finish task
+    const noButton = () => {
+        setCheckTask(false)
+        setStop(false)
+        setPlay(!play)
+    }
+
     return (
         <TimerComponentHTML>
             {(checkTask) ?
-                    <CheckTaskHTML>
-                        <TextCheckTask>Is the task done ?</TextCheckTask>
-                        <section>
-                            <ConfirmButton> Yes ! </ConfirmButton>
-                            <ReturnToTaskButton onClick={() => {
-                                setCheckTask(false)
-                                setStop(false) 
-                                setPlay(!play)}} > 
-                                No... 
-                            </ReturnToTaskButton>
-                        </section>
-                    </CheckTaskHTML>         
-                : 
-                    <>
-                        <Clock>{formatTime(coundtDown)}</Clock>
-                        <Buttons>
+                <CheckingTask   childToParent={noButton}/>
+                    : 
+                <>
+                    <Clock>{formatTime(coundtDown)}</Clock>
+                    <Buttons>
                         <SlControlPlay 
                                 onClick={() => {
                                     setPlay(!play)
@@ -69,6 +64,8 @@ export function TimerComponent({time}){
                         <SlControlPause 
                                 onClick={() => { 
                                     setStop(true)
+                                    // const currentTime = document.querySelector('span').innerText;
+                                    // setLastTime(currentTime)
                                 }}
                                 style={{
                                     fontSize: '23',
@@ -85,8 +82,8 @@ export function TimerComponent({time}){
                                     color: 'white',
                                     margin: '5px'
                                 }}/>
-                        </Buttons> 
-                    </>   }
+                    </Buttons> 
+                </>}
         </TimerComponentHTML>
         )
 }
@@ -95,7 +92,7 @@ const TimerComponentHTML = styled.div`
     display: flex;
     flex-direction: column;
 `
-const Clock = styled.p`
+const Clock = styled.span`
     font-family: 'Orbitron', sans-serif;
     color: white;
     font-size: 30px;
@@ -105,35 +102,4 @@ const Buttons = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`
-
-const CheckTaskHTML = styled.div`
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-`
-const ConfirmButton = styled.button`
-  border: none;
-  border-radius: 10px;
-  width: 80px;
-  height: 25px;
-  color: white;
-  background: green;
-  margin: 5px;
-`
-const ReturnToTaskButton = styled.button`
-  border: none;
-  border-radius: 10px;
-  width: 80px;
-  height: 25px;
-  color: white;
-  background: red;
-  margin: 5px;
-`
-const TextCheckTask = styled.h1`
-    font-family: 'Roboto Condensed', sans-serif;
-    color: white;
-    font-size: 25px;
-    margin-bottom: 50px;
 `

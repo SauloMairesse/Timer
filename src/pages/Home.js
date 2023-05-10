@@ -1,17 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TimerOption } from "../components/TimerOption";
-import { ToDoOption } from "../components/ToDoOption";
+import { TimerOption } from "../components/homeFunction/TimerOption";
+import { ToDoOption } from "../components/homeFunction/ToDoOption";
 
 export function Home() {
-    const navigate = useNavigate()
 
     return (
         <HomeBox>
             <header>To Do List :</header>
             <Functions>
-                <TimerOption/>
+                <TimerOption />
                 <ToDoOption />
             </Functions>
         </HomeBox> )

@@ -2,21 +2,28 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BsArrowLeft } from "react-icons/bs";
-import { TimerComponent } from "../components/CDTimer/counterDownTimer";
+import { TimerComponent } from "../components/Clock/counterDownTimer";
 import userContext from "../contexts/userContext";
 
 export function TimerPage() {
     const navigate = useNavigate()
-    const { taskTime, setTaskTime } = React.useContext(userContext)
     const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
-    const [startTimer, setStartTimer] = useState(null)
+    const { workedTask, setWorkedTask } = React.useContext(userContext)
+
+    function timeObj(timeString) {
+        console.log('time string :', timeString)
+        const mm = workedTask.time.slice(3)
+        const ss = workedTask.time.slice(3, 6)
+        const somatorio = Number(mm * 60) + Number(ss)
+        console.log('somatorio :', somatorio)
+        return (somatorio)
+    }
 
     return (
         <TimerHTML>
-            {console.log('taskTime :', !taskTime)}
             <header>
                 <BsArrowLeft onClick={() => {
-                    setTaskTime(false)    
+                    setWorkedTask(false)
                     navigate('/')
                 }} 
                                 style={ {
@@ -28,10 +35,9 @@ export function TimerPage() {
                                 } } />
                 <p>Countdown Timer</p>
             </header>
-            
-            <main>
-                {(!taskTime) ?
-                    <>
+
+                {(!workedTask) ?
+                    <TimerSettingDiv>    
                         <TimeForm>
                             <label>
                                 mm
@@ -50,13 +56,17 @@ export function TimerPage() {
                                     } />
                             </label>
                         </TimeForm>
-                        <StartTimer onClick={() => setTaskTime(time)}>
+                        
+                        <StartTimer onClick={() => setWorkedTask({ time: `${time.mm}:${time.ss}` })}>
                             Start
                         </StartTimer>
-                    </>
+                    </TimerSettingDiv>
                     :
-                    <TimerComponent time={Number(taskTime.mm*60)+Number(taskTime.ss)} /> }
-            </main>
+                    <TaskTimerDiv>
+                        {(!workedTask.title) ? <></> : <h1>{workedTask.title}</h1> }
+                        <TimerComponent time={timeObj(workedTask)} /> 
+                    </TaskTimerDiv>
+                }
             
         </TimerHTML>)
 }
@@ -124,4 +134,28 @@ const StartTimer = styled.button`
     border: none;
     border-radius: 15px;
     background-color: white;
+`
+const TimerSettingDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30vh;
+`
+const TaskTimerDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30vh;
+    h1 {
+        display: flex;
+        position: absolute;
+        top: 25%;
+        font-family: 'Orbitron', sans-serif;
+        color: white;
+        font-weight: BOLD;
+        letter-spacing: 2px;
+        font-size: 20px;
+    }    
 `

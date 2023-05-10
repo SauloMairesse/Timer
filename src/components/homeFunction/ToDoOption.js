@@ -6,7 +6,7 @@ export function ToDoOption({func}){
     const navigate = useNavigate()
 
     return (
-        <Cronometro onClick={() => navigate('/todo')}>
+        <ToDoList onClick={() => navigate('/todo')}>
             <FaTasks style={ {
                 color: 'white',
                 fontSize: '25px',
@@ -15,10 +15,10 @@ export function ToDoOption({func}){
             <h1> 
                 ToDo List
             </h1>
-        </Cronometro>)
+        </ToDoList>)
 } 
 
-const Cronometro = styled.div`
+const ToDoList = styled.div`
     display: flex;
     width: 250px;
     height: 70px;
@@ -32,6 +32,4 @@ const Cronometro = styled.div`
         letter-spacing: 1px;
         color: #f1f1f1;
     }
-`
-const Text = styled.div`
 `

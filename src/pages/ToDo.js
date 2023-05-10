@@ -7,7 +7,7 @@ import { SlControlPlay } from "react-icons/sl";
 import userContext from "../contexts/userContext";
 
 export function ToDo() {
-    const {taskTime, setTaskTime} = React.useContext(userContext)
+    const { workedTask, setWorkedTask } = React.useContext(userContext)
     const navigate = useNavigate()
     const [data, setData] = useState({
         name: '',
@@ -19,7 +19,8 @@ export function ToDo() {
 
     useEffect(() => {
         const BASE_URL = process.env.REACT_APP_BASE_URL
-        const promise = axios.get(`${BASE_URL}/task/1`)
+        const USER_ID = '1'
+        const promise = axios.get(`${BASE_URL}/task/${USER_ID}`)
         promise.then((res) => {
             setTasks(res.data)
         } )
@@ -33,7 +34,6 @@ export function ToDo() {
             ...data,
             [e.target.name]: e.target.value
         })
-        console.log('data :', data)
     }
 
     function submitNewTask(event) {
@@ -43,33 +43,31 @@ export function ToDo() {
             time: `${data.mm}:${data.ss}`,
             userId: 1
         }
-
         const promise = axios.post(`${BASE_URL}/newtask`, newTask)
         promise.then((res) => {
-            console.log(`resposta postagem : `, res)
             const btn = document.getElementById('btn')
-            console.log('btn :', btn)
+            //clear object TASK after sent to backend
             btn.addEventListener('click', function handleClick() {
-                console.log('cliquei no botao')
                 const inputs = document.querySelectorAll('name, mm, ss');
                 inputs.forEach(input => { input.value = ''});
-            } )
+            })
+            setRecall(!recall) //recarregando 
         })
         promise.catch( (e) => {
             console.log('erro catch post newTask :', e)
         })
     }
 
-    function Task(name, time) {
+    function Task(task) {
         return (
             <TaskHTML>
                 <div>
-                    <h1> {name} </h1>
-                    <h2> {time} </h2>
+                    <h1> {task.name} </h1>
+                    <h2> {task.time} </h2>
                 </div>
                 <SlControlPlay 
                     onClick={() => {
-                        setTaskTime({mm: Number(time.slice(0,2)), ss: Number(time.slice(3))})
+                        setWorkedTask(task)
                         navigate('/timer')
                     }}
                     style={{
@@ -85,7 +83,7 @@ export function ToDo() {
         <ToDoHTML>
             <header>
                 <BsArrowLeft onClick={() => {
-                        setTaskTime(false)
+                        setWorkedTask(false)
                         navigate('/')
                     }
                 } 
@@ -101,9 +99,8 @@ export function ToDo() {
 
             <TaskForm   onSubmit={ (event) => {
                         event.preventDefault()
-                        setRecall(!recall)
                         submitNewTask(event)
-                        event.target.reset()
+                        event.target.reset() //clear the form
                         event.target.querySelector('input[name=name]').focus()
                 } }>
                 <input  placeholder = "What's the new task ? "
@@ -131,11 +128,10 @@ export function ToDo() {
                     Add Task
                 </ButtonAddTask>
             </TaskForm>
-
             <TaskSection>
-                {tasks.map((task) => Task(task.name, task.time))}
+                {tasks.map((task) => Task(task))}
             </TaskSection>
-        </ToDoHTML>)
+        </ToDoHTML> )
 }
 
 const TaskSection = styled.section`
@@ -144,7 +140,6 @@ const TaskSection = styled.section`
     align-items: center;
     margin-top: 10px;
 `
-
 const TaskHTML = styled.div`
     display: flex;
     justify-content: space-between;
