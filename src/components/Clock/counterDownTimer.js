@@ -17,6 +17,7 @@ export function TimerComponent({ time }) {
     const [stop, setStop] = useState(false)
 
     const { workedTask, setWorkedTask } = useContext(userContext)
+    const [lastTime, setLastTime] = useState('')
    
     const timeId = useRef() //The useRef Hook allows you to persist values between renders.
 
@@ -47,6 +48,11 @@ export function TimerComponent({ time }) {
         setCheckTask(false)
         setStop(false)
         setPlay(!play)
+    }
+
+    function reFormatTime() {
+        const mm = coundtDown / 60
+        const ss = coundtDown % 60
     }
 
     return (

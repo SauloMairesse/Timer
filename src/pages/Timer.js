@@ -9,21 +9,30 @@ export function TimerPage() {
     const navigate = useNavigate()
     const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
     const { workedTask, setWorkedTask } = React.useContext(userContext)
+    const { lastTime, setLastTime } = React.useContext(userContext)
+
+    function getCurrentTime() {
+        const stringCurrentTime = document.getElementsByTagName("span")[0]
+        if (stringCurrentTime) {
+            return stringCurrentTime.innerText.replaceAll(' ', '')   
+        }
+    }
 
     return (
         <TimerHTML>
             <header>
-                <BsArrowLeft onClick={() => {
-                    setWorkedTask(false)
-                    navigate('/')
-                }} 
-                                style={ {
-                                    display: 'flex',
-                                    color: 'white',
-                                    fontSize: '30',
-                                    position: 'fixed',
-                                    left: '20px'
-                                } } />
+                <BsArrowLeft
+                    onClick={() => {
+                        setLastTime(getCurrentTime())
+                        navigate('/')
+                    }} 
+                    style={ {
+                        display: 'flex',
+                        color: 'white',
+                        fontSize: '30',
+                        position: 'fixed',
+                        left: '20px'
+                    } } />
                 <p>Countdown Timer</p>
             </header>
 
@@ -54,8 +63,7 @@ export function TimerPage() {
                     </TimerSettingDiv>
                     :
                     <TaskTimerDiv>
-                        {(!workedTask.title) ? <></> : <h1>{workedTask.title}</h1>}
-                        {console.log('tarefa e tempo em texto: ', workedTask)}            
+                        {(!workedTask.title) ? <></> : <h1>{workedTask.title}</h1>}         
                         <TimerComponent time={workedTask.time} /> 
                     </TaskTimerDiv>
                 }

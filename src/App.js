@@ -12,12 +12,18 @@ function App() {
   const [token, setToken] = useState('');
   const [user, setUser] = useState({});
   const [workedTask, setWorkedTask] = useState(false)
-  
+  const [lastTime, setLastTime] = useState({})
+
   return (
     <>
       <GlobalStyle />
       
-      <userContext.Provider value={{ token, setToken, user, setUser, workedTask, setWorkedTask }}>
+      <userContext.Provider value={{
+        token, setToken,
+        user, setUser,
+        workedTask, setWorkedTask,
+        lastTime, setLastTime
+      }}>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Home/>} />
