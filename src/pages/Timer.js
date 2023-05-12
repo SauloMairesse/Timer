@@ -41,7 +41,7 @@ export function TimerPage() {
             promise.then((res) => {
                 setWorkedTask(false)
                 setLastTime('')
-                console.log('response :', res)
+                console.log('TEMPO ATUALIZADO:')
             })
             promise.catch( (e) => { console.log('erro catch put update task in home:', e) })
             }
@@ -52,7 +52,7 @@ export function TimerPage() {
             <header>
                 <BsArrowLeft
                     onClick={() => {
-                        requestUpdateTime()
+                        if (workedTask) { requestUpdateTime() }
                         navigate('/')
                     }} 
                     style={ {

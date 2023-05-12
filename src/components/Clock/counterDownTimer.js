@@ -11,14 +11,11 @@ export function TimerComponent({ time }) {
     const mimAndSecond = time.split(':')
     const sumTime = Number(mimAndSecond[0] * 60) + Number(mimAndSecond[1])
     const [coundtDown, setCountDown] = useState(sumTime)
-    
     const [checkTask, setCheckTask] = useState(false)
     const [play, setPlay] = useState(false)
     const [stop, setStop] = useState(false)
-
     const { workedTask, setWorkedTask } = useContext(userContext)
-    const [lastTime, setLastTime] = useState('')
-   
+    const [lastTime, setLastTime] = useState('')   
     const timeId = useRef() //The useRef Hook allows you to persist values between renders.
 
     useEffect( () => {
@@ -43,6 +40,17 @@ export function TimerComponent({ time }) {
         
         return `${minutes} : ${seconds}`
     }
+
+    function getCurrentTime() {                                             
+        console.log('pegando o ultimo tempo : ')
+        const stringCurrentTime = document.getElementsByTagName("span")[0]
+        if (stringCurrentTime) {                                           
+            const time = stringCurrentTime.innerHTML.replaceAll(' ', '')
+            console.log('retornando o ultimo tempo : ', time)           
+            return time                                                 
+        }                                                                
+    }  
+
     //noBUtton from checking Screen before finish task
     const noButton = () => {
         setCheckTask(false)
