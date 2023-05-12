@@ -8,7 +8,9 @@ export function CheckingTask({childToParent}) {
             <CheckTaskHTML>
                 <TextCheckTask>Is the task done ?</TextCheckTask>
                     <section>
-                        <ConfirmButton onClick={() => navigate('/')}>
+                <ConfirmButton onClick={() => {
+                    navigate('/')
+                }}>
                             Yes !
                         </ConfirmButton>
                         <ReturnToTaskButton onClick={() => {childToParent()}} > 

@@ -9,36 +9,10 @@ import axios from "axios";
 export function Home() {
     const { workedTask, setWorkedTask } = React.useContext(userContext)
     const { lastTime, setLastTime } = React.useContext(userContext)
-    console.log('objetos para envio :', workedTask, lastTime)
-
-    useEffect(() => {
-        if (workedTask.id && lastTime !== workedTask.time) {
-            const BASE_URL = process.env.REACT_APP_BASE_URL
-            const userId = 1
-            const newTaskUpdated = {
-                id: workedTask.id,
-                name: workedTask.name,
-                time: workedTask.time,
-                userId: userId,
-                newTime: lastTime
-            }
-            console.log('dados : ', BASE_URL, newTaskUpdated,)
-            const promise = axios.put(`${BASE_URL}/task/time/${workedTask.id}`, newTaskUpdated)
-            promise.then((res) => {
-                console.log('response :', res)
-                setWorkedTask(false)
-                setLastTime('')
-            } )
-            promise.catch( (e) => {
-                console.log('erro catch put update task in home:', e)
-            })
-         }
-    } , [])
 
     return (
         <HomeBox>
             <header> HOME : </header>
-            {console.log('lastTime, setLastTime : ', lastTime, workedTask)}
             <Functions>
                 <TimerOption />
                 <ToDoOption />

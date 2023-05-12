@@ -50,9 +50,11 @@ export function TimerComponent({ time }) {
         setPlay(!play)
     }
 
-    function reFormatTime() {
-        const mm = coundtDown / 60
-        const ss = coundtDown % 60
+    function getCurrentTime() {
+       const stringCurrentTime = document.getElementsByTagName("span")[0]
+        if (stringCurrentTime) {
+            return stringCurrentTime.innerText.replaceAll(' ', '')   
+        }
     }
 
     return (
@@ -84,6 +86,7 @@ export function TimerComponent({ time }) {
                                 }}/>
                         <MdDownloadDone 
                                 onClick={() => { 
+                                    setLastTime(getCurrentTime())
                                     setStop(true)
                                     setCheckTask(true)
                                 }}

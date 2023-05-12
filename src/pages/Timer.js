@@ -1,21 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BsArrowLeft } from "react-icons/bs";
 import { TimerComponent } from "../components/Clock/counterDownTimer";
 import userContext from "../contexts/userContext";
+import axios from "axios";
 
 export function TimerPage() {
     const navigate = useNavigate()
     const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
     const { workedTask, setWorkedTask } = React.useContext(userContext)
     const { lastTime, setLastTime } = React.useContext(userContext)
+    const [ updateTime, setUpdateTime ] = React.useState(false)
 
-    function getCurrentTime() {
+    // function getCurrentTime() {                                             
+    //     console.log('pegando o ultimo tempo : ')
+    //     const stringCurrentTime = document.getElementsByTagName("span")[0]
+    //     if (stringCurrentTime) {                                           
+    //         const time = stringCurrentTime.innerHTML.replaceAll(' ', '')
+    //         console.log('retornando o ultimo tempo : ', time)           
+    //         return time                                                 
+    //     }                                                                
+    // }                                                                       
+
+    function requestUpdateTime() {
         const stringCurrentTime = document.getElementsByTagName("span")[0]
-        if (stringCurrentTime) {
-            return stringCurrentTime.innerText.replaceAll(' ', '')   
-        }
+        const time = stringCurrentTime.innerHTML.replaceAll(' ', '')
+        if (workedTask.id && time) {
+            const BASE_URL = process.env.REACT_APP_BASE_URL
+            const userId = 1
+            const newTaskUpdated = {
+                id: workedTask.id,
+                name: workedTask.name,
+                time: workedTask.time,
+                userId: userId,
+                done: workedTask.done,
+                newTime: time
+            }
+            const promise = axios.put(`${BASE_URL}/task/time/${workedTask.id}`, newTaskUpdated)
+            promise.then((res) => {
+                setWorkedTask(false)
+                setLastTime('')
+                console.log('response :', res)
+            })
+            promise.catch( (e) => { console.log('erro catch put update task in home:', e) })
+            }
     }
 
     return (
@@ -23,7 +52,7 @@ export function TimerPage() {
             <header>
                 <BsArrowLeft
                     onClick={() => {
-                        setLastTime(getCurrentTime())
+                        requestUpdateTime()
                         navigate('/')
                     }} 
                     style={ {
@@ -63,7 +92,6 @@ export function TimerPage() {
                     </TimerSettingDiv>
                     :
                     <TaskTimerDiv>
-                        {(!workedTask.title) ? <></> : <h1>{workedTask.title}</h1>}         
                         <TimerComponent time={workedTask.time} /> 
                     </TaskTimerDiv>
                 }
