@@ -1,15 +1,50 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
+import userContext from "../../contexts/userContext.js";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export function CheckingTask({childToParent}) {
     const navigate = useNavigate()
-    
+
+    const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
+    const { workedTask, setWorkedTask } = React.useContext(userContext)
+    const { lastTime, setLastTime } = React.useContext(userContext)
+    const [ updateTime, setUpdateTime ] = React.useState(false)
+
+    console.log('condições : ', workedTask, lastTime)
+
+    function requestDoneTime() {
+        if (workedTask.id && lastTime ) {
+            const BASE_URL = process.env.REACT_APP_BASE_URL
+            const userId = 1
+            const newTaskUpdated = {
+                id: workedTask.id,
+                name: workedTask.name,
+                time: workedTask.time,
+                userId: userId,
+                done: true,
+                newTime: lastTime
+            }
+            const promise = axios.put(`${BASE_URL}/task/done/${workedTask.id}`, newTaskUpdated)
+            promise.then((res) => {
+                setWorkedTask(false)
+                setLastTime('')
+                console.log('TASK DONE :')
+            })
+            promise.catch( (e) => { console.log('erro catch put update task in home:', e) })
+            return
+        }
+        setWorkedTask(false)
+        setLastTime('')
+}
 
     return (
             <CheckTaskHTML>
                 <TextCheckTask>Is the task done ?</TextCheckTask>
                     <section>
                 <ConfirmButton onClick={() => {
+                    requestDoneTime()
                     navigate('/')
                 }}>
                             Yes !

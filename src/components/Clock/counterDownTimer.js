@@ -15,7 +15,7 @@ export function TimerComponent({ time }) {
     const [play, setPlay] = useState(false)
     const [stop, setStop] = useState(false)
     const { workedTask, setWorkedTask } = useContext(userContext)
-    const [lastTime, setLastTime] = useState('')   
+    const { lastTime, setLastTime }  = useContext(userContext)   
     const timeId = useRef() //The useRef Hook allows you to persist values between renders.
 
     useEffect( () => {
@@ -61,7 +61,9 @@ export function TimerComponent({ time }) {
     function getCurrentTime() {
        const stringCurrentTime = document.getElementsByTagName("span")[0]
         if (stringCurrentTime) {
-            return stringCurrentTime.innerText.replaceAll(' ', '')   
+            const time = stringCurrentTime.innerText.replaceAll(' ', '')   
+            setLastTime(time)
+            console.log('tempo atualizado :', time)
         }
     }
 
@@ -94,7 +96,7 @@ export function TimerComponent({ time }) {
                                 }}/>
                         <MdDownloadDone 
                                 onClick={() => { 
-                                    setLastTime(getCurrentTime())
+                                    getCurrentTime()
                                     setStop(true)
                                     setCheckTask(true)
                                 }}
