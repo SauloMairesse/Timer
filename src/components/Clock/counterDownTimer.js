@@ -7,6 +7,10 @@ import { MdDownloadDone } from "react-icons/md";
 import { CheckingTask } from "./CheckBoxTask.js";
 import userContext from "../../contexts/userContext.js";
 
+import { useNavigate } from "react-router-dom"
+import React from "react";
+import axios from "axios";
+
 export function TimerComponent({ time }) {
     const mimAndSecond = time.split(':')
     const sumTime = Number(mimAndSecond[0] * 60) + Number(mimAndSecond[1])
@@ -18,9 +22,12 @@ export function TimerComponent({ time }) {
     const { lastTime, setLastTime }  = useContext(userContext)   
     const timeId = useRef() //The useRef Hook allows you to persist values between renders.
 
+    const navigate = useNavigate();
+
     useEffect( () => {
         timeId.current = setInterval( () => {
-            setCountDown(prev =>  prev - 1)
+            setCountDown(prev => prev - 1)
+            console.log('tempo : ', Number.isInteger(timeId.current))
         }, 1000)
         return () => clearInterval(timeId.current)
     }, [play])
@@ -35,27 +42,10 @@ export function TimerComponent({ time }) {
         let minutes = Math.floor(time / 60)
         let seconds = Math.floor(time - (minutes*60))
 
-        if(minutes <= 10) minutes = `0${minutes}`
-        if (seconds <= 10) seconds = `0${seconds}`
+        if(minutes < 10) minutes = `0${minutes}`
+        if (seconds < 10) seconds = `0${seconds}`
         
         return `${minutes} : ${seconds}`
-    }
-
-    function getCurrentTime() {                                             
-        console.log('pegando o ultimo tempo : ')
-        const stringCurrentTime = document.getElementsByTagName("span")[0]
-        if (stringCurrentTime) {                                           
-            const time = stringCurrentTime.innerHTML.replaceAll(' ', '')
-            console.log('retornando o ultimo tempo : ', time)           
-            return time                                                 
-        }                                                                
-    }  
-
-    //noBUtton from checking Screen before finish task
-    const noButton = () => {
-        setCheckTask(false)
-        setStop(false)
-        setPlay(!play)
     }
 
     function getCurrentTime() {
@@ -63,14 +53,54 @@ export function TimerComponent({ time }) {
         if (stringCurrentTime) {
             const time = stringCurrentTime.innerText.replaceAll(' ', '')   
             setLastTime(time)
-            console.log('tempo atualizado :', time)
         }
+    }
+
+      function requestDoneTime() {
+        if (workedTask.id && lastTime ) {
+            const BASE_URL = process.env.REACT_APP_BASE_URL
+            const userId = 1
+            const newTaskUpdated = {
+                id: workedTask.id,
+                name: workedTask.name,
+                time: workedTask.time,
+                userId: userId,
+                done: true,
+                newTime: lastTime
+            }
+            const promise = axios.put(`${BASE_URL}/task/done/${workedTask.id}`, newTaskUpdated)
+            promise.then((res) => {
+                setWorkedTask(false)
+                setLastTime('')
+            })
+            promise.catch( (e) => { console.log('erro catch put update task in home:', e) })
+            return
+        }
+        setWorkedTask(false)
+        setLastTime('')
     }
 
     return (
         <TimerComponentHTML>
             {(checkTask) ?
-                <CheckingTask   childToParent={noButton}/>
+                <CheckTaskHTML>
+                    <TextCheckTask>Is the task done ?</TextCheckTask>
+                    <section>
+                        <ConfirmButton onClick={() => {
+                            requestDoneTime()
+                            navigate('/')
+                        }}>
+                            Yes !
+                        </ConfirmButton>
+                        <NotButton onClick={() => {
+                            setCheckTask(false)
+                            setStop(false)
+                            setPlay(!play)
+                        }} > 
+                            No...
+                        </NotButton>
+                    </section>
+                </CheckTaskHTML>    
                     : 
                 <>
                     <Clock>{formatTime(coundtDown)}</Clock>
@@ -125,4 +155,35 @@ const Buttons = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+`
+
+const CheckTaskHTML = styled.div`
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+`
+const ConfirmButton = styled.button`
+  border: none;
+  border-radius: 10px;
+  width: 80px;
+  height: 25px;
+  color: white;
+  background: green;
+  margin: 5px;
+`
+const NotButton = styled.button`
+  border: none;
+  border-radius: 10px;
+  width: 80px;
+  height: 25px;
+  color: white;
+  background: red;
+  margin: 5px;
+`
+const TextCheckTask = styled.span`
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
+    font-size: 25px;
+    margin-bottom: 50px;
 `

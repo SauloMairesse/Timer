@@ -11,17 +11,7 @@ export function TimerPage() {
     const [time, setTime] = React.useState({mm:Number(0), ss: Number(0)})
     const { workedTask, setWorkedTask } = React.useContext(userContext)
     const { lastTime, setLastTime } = React.useContext(userContext)
-    const [ updateTime, setUpdateTime ] = React.useState(false)
-
-    // function getCurrentTime() {                                             
-    //     console.log('pegando o ultimo tempo : ')
-    //     const stringCurrentTime = document.getElementsByTagName("span")[0]
-    //     if (stringCurrentTime) {                                           
-    //         const time = stringCurrentTime.innerHTML.replaceAll(' ', '')
-    //         console.log('retornando o ultimo tempo : ', time)           
-    //         return time                                                 
-    //     }                                                                
-    // }                                                                       
+    const [ updateTime, setUpdateTime ] = React.useState(false)                                                                 
 
     function requestUpdateTime() {
         const stringCurrentTime = document.getElementsByTagName("span")[0]
@@ -41,7 +31,6 @@ export function TimerPage() {
             promise.then((res) => {
                 setWorkedTask(false)
                 setLastTime('')
-                console.log('TEMPO ATUALIZADO:')
             })
             promise.catch( (e) => { console.log('erro catch put update task in home:', e) })
             }
@@ -64,37 +53,37 @@ export function TimerPage() {
                     } } />
                 <p>Countdown Timer</p>
             </header>
-
-                {(!workedTask) ?
-                    <TimerSettingDiv>    
-                        <TimeForm>
-                            <label>
-                                mm
+            
+            {(!workedTask) ?
+                <TimerSettingDiv>    
+                    <TimeForm>
+                        <label>
+                            Mim
+                        <input  placeholder="00"
+                                type="number"
+                                name="mm"
+                                onChange={(e) => setTime({ ...time, mm: e.target.value })
+                                } />
+                        </label>
+                        <label>
+                            Sec
                             <input  placeholder="00"
                                     type="number"
-                                    name="mm"
-                                    onChange={(e) => setTime({ ...time, mm: e.target.value })
-                                    } />
-                            </label>
-                            <label>
-                                ss
-                                <input  placeholder="00"
-                                        type="number"
-                                        name="ss"
+                                    name="ss"
                                     onChange={(e) => setTime({ ...time, ss: e.target.value })
-                                    } />
-                            </label>
-                        </TimeForm>
-                        
-                        <StartTimer onClick={() => setWorkedTask({ time: `${time.mm}:${time.ss}` })}>
-                            Start
-                        </StartTimer>
-                    </TimerSettingDiv>
-                    :
-                    <TaskTimerDiv>
-                        <TimerComponent time={workedTask.time} /> 
-                    </TaskTimerDiv>
-                }
+                                } />
+                        </label>
+                    </TimeForm>
+                    
+                    <StartTimer onClick={() => setWorkedTask({ time: `${time.mm}:${time.ss}` })}>
+                        Start
+                    </StartTimer>
+                </TimerSettingDiv>
+                :
+                <TaskTimerDiv>
+                    <TimerComponent time={workedTask.time} /> 
+                </TaskTimerDiv>
+            }
             
         </TimerHTML>)
 }

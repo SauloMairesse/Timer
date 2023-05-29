@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import userContext from "../../contexts/userContext.js";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 
 export function CheckingTask({childToParent}) {
@@ -11,8 +11,6 @@ export function CheckingTask({childToParent}) {
     const { workedTask, setWorkedTask } = React.useContext(userContext)
     const { lastTime, setLastTime } = React.useContext(userContext)
     const [ updateTime, setUpdateTime ] = React.useState(false)
-
-    console.log('condições : ', workedTask, lastTime)
 
     function requestDoneTime() {
         if (workedTask.id && lastTime ) {
@@ -30,7 +28,6 @@ export function CheckingTask({childToParent}) {
             promise.then((res) => {
                 setWorkedTask(false)
                 setLastTime('')
-                console.log('TASK DONE :')
             })
             promise.catch( (e) => { console.log('erro catch put update task in home:', e) })
             return
@@ -42,18 +39,18 @@ export function CheckingTask({childToParent}) {
     return (
             <CheckTaskHTML>
                 <TextCheckTask>Is the task done ?</TextCheckTask>
-                    <section>
-                <ConfirmButton onClick={() => {
-                    requestDoneTime()
-                    navigate('/')
-                }}>
-                            Yes !
-                        </ConfirmButton>
-                        <ReturnToTaskButton onClick={() => {childToParent()}} > 
-                            No... 
-                        </ReturnToTaskButton>
-                    </section>
-                </CheckTaskHTML>         
+                <section>
+                    <ConfirmButton onClick={() => {
+                        requestDoneTime()
+                        navigate('/')
+                    }}>
+                        Yes !
+                    </ConfirmButton>
+                    <NotButton onClick={() => {childToParent()}} > 
+                        No...
+                    </NotButton>
+                </section>
+            </CheckTaskHTML>         
     )
 }
 
@@ -72,7 +69,7 @@ const ConfirmButton = styled.button`
   background: green;
   margin: 5px;
 `
-const ReturnToTaskButton = styled.button`
+const NotButton = styled.button`
   border: none;
   border-radius: 10px;
   width: 80px;
